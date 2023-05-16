@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import 'express-async-errors';
 import Joi from 'joi';
+import { create, deleteByID, getAll, getOneByID, updateByID } from './controllers/server.js';
 
 const app = express();
 const port = 4000;
@@ -9,64 +10,15 @@ const port = 4000;
 app.use(express.json());
 app.use(morgan('dev'));
 
-type Planet = {
-    id: number,
-    name: string,
-};
+app.get("/api/planets", getAll);
 
-type Planets = Planet[];
+app.get('/api/planets/:id', getOneByID);
 
-let planets: Planets = [
-    {
-        id: 1,
-        name: "Earth",
-    },
-    {
-        id: 2,
-        name: "Mars",
-    },
-];
+app.post('/api/planets', create);
 
-app.get("/api/planets", (req, res) => {
-    res.status(200).json(planets);
-});
+app.put('/api/planets/:id', updateByID);
 
-app.get('/api/planets/:id', (req, res) => {
-    const { id } = req.params;
-    const planet = planets.find((planet) => planet.id === Number(id));
-    res.status(200).json(planet);
-});
-
-const planetSchema = Joi.object({
-    id: Joi.number().required(),
-    name: Joi.string().required(),
-});
-
-app.post('/api/planets', (req, res) => {
-    const { error } = planetSchema.validate(req.body);
-
-    if (error) {
-        return res.status(400).json({ error: error.details[0].message });
-    }
-
-    const { id, name } = req.body;
-    const newPlanet = { id, name };
-    planets = [...planets, newPlanet];
-    res.status(201).json({ msg: 'planet added' });
-});
-
-app.put('/api/planets/:id', (req, res) => {
-    const { id } = req.params;
-    const { name } = req.body;
-    planets = planets.map((planet) => planet.id === Number(id) ? { ...planet, name } : planet);
-    res.status(200).json({ msg: 'planet updated' });
-});
-
-app.delete('/api/planets/:id', (req, res) => {
-    const { id } = req.params;
-    planets = planets.filter(planet => planet.id !== Number(id));
-    res.status(200).json({ msg: 'Planet Deleted' });
-});
+app.delete('/api/planets/:id',deleteByID);
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
