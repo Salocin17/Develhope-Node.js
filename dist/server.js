@@ -1,6 +1,10 @@
 import express from 'express';
+import morgan from 'morgan';
+import 'express-async-errors';
 const app = express();
 const port = 4000;
+app.use(express.json());
+app.use(morgan('dev'));
 let planets = [
     {
         id: 1,
