@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "tsc-watch --noClear -p ./tsconfig.json --outDir ./dist --onSuccess \"node ./dist/server.js\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "joi": "^17.9.2"
+  },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.1",
     "@types/express": "^4.17.14",
