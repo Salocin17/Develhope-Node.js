@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import 'express-async-errors';
 import { create, deleteByID, getAll, getOneByID, updateByID } from './controllers/server.js';
 const app = express();
-const port = 4000;
+const port = 3000;
 app.use(express.json());
 app.use(morgan('dev'));
 app.get("/api/planets", getAll);

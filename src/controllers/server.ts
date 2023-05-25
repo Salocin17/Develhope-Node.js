@@ -2,6 +2,7 @@ import express, {Request, Response} from 'express';
 import morgan from 'morgan';
 import 'express-async-errors';
 import Joi from 'joi';
+import {db} from '../dbSetup.js'
 
 type Planet = {
     id: number,
@@ -26,39 +27,49 @@ const planetSchema = Joi.object({
     name: Joi.string().required(),
 });
 
-const getAll = (req: Request, res: Response) => {
+const getAll = async (req: Request, res: Response) => {
+    const planets = await db.many(`
+        SELECT * FROM planets;
+    `)
     res.status(200).json(planets);
-};
+}
 
-const getOneByID = (req: Request, res: Response) => {
+const getOneByID = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const planet = planets.find((planet) => planet.id === Number(id));
+    const planet = await db.oneOrNone(`
+        SELECT * FROM planets;
+    `, id)
     res.status(200).json(planet);
 };
 
-const create = (req: Request, res: Response) => {
+const create = async (req: Request, res: Response) => {
     const { error } = planetSchema.validate(req.body);
 
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
     }
 
-    const { id, name } = req.body;
-    const newPlanet = { id, name };
-    planets = [...planets, newPlanet];
+    const { name } = req.body;
+    const planets = await db.oneOrNone(`
+        INSERT INTO planets (name) VALUES ($1);
+    `,name)
     res.status(201).json({ msg: 'planet added' });
 };
 
-const updateByID = (req: Request, res: Response) => {
+const updateByID = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { name } = req.body;
-    planets = planets.map((planet) => planet.id === Number(id) ? { ...planet, name } : planet);
+    const planets = await db.oneOrNone(`
+        UPDATE planets SET name=$2 WHERE id=$1;
+    `, [id, name])
     res.status(200).json({ msg: 'planet updated' });
 };
 
-const deleteByID = (req: Request, res: Response) => {
+const deleteByID = async (req: Request, res: Response) => {
     const { id } = req.params;
-    planets = planets.filter(planet => planet.id !== Number(id));
+    const planets = await db.oneOrNone(`
+        DELETE FROM planets WHERE id=$1;
+    `, id)
     res.status(200).json({ msg: 'Planet Deleted' });
 };
 

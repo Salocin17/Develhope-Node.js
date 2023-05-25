@@ -8,7 +8,9 @@
     "dev": "tsc-watch --noClear -p ./tsconfig.json --outDir ./dist --onSuccess \"node ./dist/server.js\""
   },
   "dependencies": {
-    "joi": "^17.9.2"
+    "dotenv": "^16.0.3",
+    "joi": "^17.9.2",
+    "pg-promise": "^11.4.3"
   },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.1",
