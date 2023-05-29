@@ -10,16 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import 'express-async-errors';
 import Joi from 'joi';
 import { db } from '../dbSetup.js';
-let planets = [
-    {
-        id: 1,
-        name: "Earth",
-    },
-    {
-        id: 2,
-        name: "Mars",
-    },
-];
 const planetSchema = Joi.object({
     id: Joi.number().required(),
     name: Joi.string().required(),
@@ -33,7 +23,7 @@ const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const getOneByID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const planet = yield db.oneOrNone(`
-        SELECT * FROM planets;
+        SELECT * FROM planets WHERE id=$1;
     `, id);
     res.status(200).json(planet);
 });

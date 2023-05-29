@@ -15,24 +15,17 @@ const db = pgPromise()({
 const setupDb = async () => {
     await db.none(`
     DROP TABLE IF EXISTS planets;
-
-    CREATE TABLE planets (
-        id SERIAL NOT NULL PRIMARY KEY,
-        name TEXT NOT NULL
-    )
-
-    `)
-
-    await writePlanet()
+    CREATE TABLE planets(
+      id SERIAL NOT NULL PRIMARY KEY,
+      name TEXT NOT NULL
+    );
     
-}
-
-const writePlanet = async () => {
-    await db.many(`
     INSERT INTO planets (name) VALUES ('Earth');
     INSERT INTO planets (name) VALUES ('Mars');
     `)
 }
+
+setupDb()
 
 
 export {db, setupDb}

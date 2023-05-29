@@ -5,7 +5,7 @@ import Joi from 'joi';
 import { create, deleteByID, getAll, getOneByID, updateByID } from './controllers/server.js';
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 app.use(express.json());
 app.use(morgan('dev'));

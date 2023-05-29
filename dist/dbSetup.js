@@ -20,19 +20,14 @@ const db = pgPromise()({
 const setupDb = () => __awaiter(void 0, void 0, void 0, function* () {
     yield db.none(`
     DROP TABLE IF EXISTS planets;
-
-    CREATE TABLE planets (
-        id SERIAL NOT NULL PRIMARY KEY,
-        name TEXT NOT NULL
-    )
-
-    `);
-    yield writePlanet();
-});
-const writePlanet = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield db.many(`
+    CREATE TABLE planets(
+      id SERIAL NOT NULL PRIMARY KEY,
+      name TEXT NOT NULL
+    );
+    
     INSERT INTO planets (name) VALUES ('Earth');
     INSERT INTO planets (name) VALUES ('Mars');
     `);
 });
+setupDb();
 export { db, setupDb };

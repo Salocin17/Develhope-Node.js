@@ -4,24 +4,6 @@ import 'express-async-errors';
 import Joi from 'joi';
 import {db} from '../dbSetup.js'
 
-type Planet = {
-    id: number,
-    name: string,
-};
-
-type Planets = Planet[];
-
-let planets: Planets = [
-    {
-        id: 1,
-        name: "Earth",
-    },
-    {
-        id: 2,
-        name: "Mars",
-    },
-];
-
 const planetSchema = Joi.object({
     id: Joi.number().required(),
     name: Joi.string().required(),
@@ -37,7 +19,7 @@ const getAll = async (req: Request, res: Response) => {
 const getOneByID = async (req: Request, res: Response) => {
     const { id } = req.params;
     const planet = await db.oneOrNone(`
-        SELECT * FROM planets;
+        SELECT * FROM planets WHERE id=$1;
     `, id)
     res.status(200).json(planet);
 };
