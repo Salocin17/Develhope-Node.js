@@ -2,7 +2,7 @@ import express, {Request, Response} from 'express';
 import morgan from 'morgan';
 import 'express-async-errors';
 import Joi from 'joi';
-import {db} from '../dbSetup.js'
+import {db} from '../server.js'
 
 const planetSchema = Joi.object({
     id: Joi.number().required(),
@@ -55,4 +55,12 @@ const deleteByID = async (req: Request, res: Response) => {
     res.status(200).json({ msg: 'Planet Deleted' });
 };
 
-export {getAll, getOneByID, create, updateByID, deleteByID}
+const addImage =async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const image = req.file?.path;
+    const planets = await db.oneOrNone(
+        `UPDATE planets SET image=$2 WHERE id=$1;`, [id, image])
+    res.status(201).json({ msg: "Planet image uploaded successfully" });
+}
+
+export {getAll, getOneByID, create, updateByID, deleteByID, addImage}

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import 'express-async-errors';
 import Joi from 'joi';
-import { db } from '../dbSetup.js';
+import { db } from '../server.js';
 const planetSchema = Joi.object({
     id: Joi.number().required(),
     name: Joi.string().required(),
@@ -53,4 +53,11 @@ const deleteByID = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     `, id);
     res.status(200).json({ msg: 'Planet Deleted' });
 });
-export { getAll, getOneByID, create, updateByID, deleteByID };
+const addImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { id } = req.params;
+    const image = (_a = req.file) === null || _a === void 0 ? void 0 : _a.path;
+    const planets = yield db.oneOrNone(`UPDATE planets SET image=$2 WHERE id=$1;`, [id, image]);
+    res.status(201).json({ msg: "Planet image uploaded successfully" });
+});
+export { getAll, getOneByID, create, updateByID, deleteByID, addImage };
