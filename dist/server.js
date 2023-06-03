@@ -41,6 +41,15 @@ const setupDb = () => __awaiter(void 0, void 0, void 0, function* () {
       name TEXT NOT NULL,
       image TEXT
     );
+
+    DROP TABLE IF EXISTS users;
+
+  CREATE TABLE users (
+    id SERIAL NOT NULL PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    token TEXT
+  );
     
     INSERT INTO planets (name) VALUES ('Earth');
     INSERT INTO planets (name) VALUES ('Mars');
@@ -49,11 +58,11 @@ const setupDb = () => __awaiter(void 0, void 0, void 0, function* () {
 setupDb();
 app.use(express.json());
 app.use(morgan('dev'));
-app.get("/api/planets", getAll);
-app.get('/api/planets/:id', getOneByID);
-app.post('/api/planets', create);
-app.put('/api/planets/:id', updateByID);
-app.delete('/api/planets/:id', deleteByID);
+app.get("/planets", getAll);
+app.get('/planets/:id', getOneByID);
+app.post('/planets', create);
+app.put('/planets/:id', updateByID);
+app.delete('/planets/:id', deleteByID);
 app.post('/planets/:id/image', upload.single("image"), addImage);
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

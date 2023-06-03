@@ -38,6 +38,15 @@ const setupDb = async () => {
       name TEXT NOT NULL,
       image TEXT
     );
+
+    DROP TABLE IF EXISTS users;
+
+  CREATE TABLE users (
+    id SERIAL NOT NULL PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    token TEXT
+  );
     
     INSERT INTO planets (name) VALUES ('Earth');
     INSERT INTO planets (name) VALUES ('Mars');
@@ -49,15 +58,15 @@ setupDb()
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.get("/api/planets", getAll);
+app.get("/planets", getAll);
 
-app.get('/api/planets/:id', getOneByID);
+app.get('/planets/:id', getOneByID);
 
-app.post('/api/planets', create);
+app.post('/planets', create);
 
-app.put('/api/planets/:id', updateByID);
+app.put('/planets/:id', updateByID);
 
-app.delete('/api/planets/:id', deleteByID);
+app.delete('/planets/:id', deleteByID);
 
 app.post('/planets/:id/image', upload.single("image"), addImage);
 
