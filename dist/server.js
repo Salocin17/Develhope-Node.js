@@ -14,6 +14,7 @@ import 'express-async-errors';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import { create, deleteByID, getAll, getOneByID, updateByID, addImage } from './controllers/server.js';
+import { logIn, signUp } from './controllers/users.js';
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "./uploads");
@@ -64,6 +65,8 @@ app.post('/planets', create);
 app.put('/planets/:id', updateByID);
 app.delete('/planets/:id', deleteByID);
 app.post('/planets/:id/image', upload.single("image"), addImage);
+app.post('/users/signup', signUp);
+app.post('/users/login', logIn);
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
