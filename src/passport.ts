@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv"
-import passport from "passport";
+import passport from 'passport';
 import passportJWT from "passport-jwt";
 import {db} from './server.js'
 
@@ -7,7 +7,7 @@ dotenv.config();
 
 const {SECRET} = process.env;
 
-passport.use(
+passport.use (
     new passportJWT.Strategy({
         secretOrKey: SECRET,
         jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),

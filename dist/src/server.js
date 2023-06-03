@@ -15,7 +15,7 @@ import dotenv from 'dotenv';
 import multer from 'multer';
 import { create, deleteByID, getAll, getOneByID, updateByID, addImage } from './controllers/server.js';
 import { logIn, signUp, logOut } from './controllers/users.js';
-import { authorize } from "./authorize.js";
+import { authorize } from '../middleware/authorize.js';
 import './passport.js';
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

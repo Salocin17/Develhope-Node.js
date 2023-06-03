@@ -5,10 +5,12 @@ import 'express-async-errors';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import { create, deleteByID, getAll, getOneByID, updateByID, addImage } from './controllers/server.js';
-import {logIn, signUp} from './controllers/users.js'
+import { logIn, signUp, logOut } from './controllers/users.js';
+import {authorize} from '../middleware/authorize.js';
+import './passport.js'
 
 const storage = multer.diskStorage({
-  destination: (req: Request, file:any, cb:any) => {
+  destination: (req: Request, file: any, cb: any) => {
     cb(null, "./uploads");
   },
   filename: (req: Request, file: any, cb: any) => {
@@ -24,15 +26,15 @@ const port = 4000;
 
 
 const db = pgPromise()({
-    host:'127.0.0.1',
-    port: 5432,
-    database: 'postgres',
-    user: 'postgres',
-    password: 'postgres'
+  host: '127.0.0.1',
+  port: 5432,
+  database: 'postgres',
+  user: 'postgres',
+  password: 'postgres'
 })
 
 const setupDb = async () => {
-    await db.none(`
+  await db.none(`
     DROP TABLE IF EXISTS planets;
     CREATE TABLE planets(
       id SERIAL NOT NULL PRIMARY KEY,
@@ -75,9 +77,11 @@ app.post('/users/signup', signUp);
 
 app.post('/users/login', logIn)
 
+app.get('/users/logout', authorize, logOut)
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
 
-export {db, setupDb}
+export { db, setupDb }

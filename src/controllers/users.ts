@@ -35,4 +35,10 @@ const signUp = async (req: Request, res: Response) => {
     }
 }
 
-export { logIn, signUp }
+const logOut = async (req: Request, res: Response) => {
+    const user: any = req.user
+    const update = await db.one(`UPDATE users SET token=$2 WHERE id=$1 RETURNING *`, [user?.id, null])
+    res.status(200).json({ msg: "logout" })
+}
+
+export { logIn, signUp, logOut }
